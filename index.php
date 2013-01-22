@@ -1,8 +1,11 @@
 <?php 
+//****For debugging*******************
 error_reporting(E_ALL & ~E_DEPRECATED);  
 ini_set('display_errors',0);  
+//*************************************
 
 //****Configuration*****
+ini_set('memory_limit', '100M'); //set the memeroy usage, with bug images you need a lot of memory!
 $max_file_p_pa_h = 4 ; //max files per pag hor
 $max_file_p_pa_v = 4 ; //max files per pag ver
 $max_file_pa = $max_file_p_pa_v * $max_file_p_pa_h ; //max files per page
@@ -33,11 +36,13 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "4.17"; 
+$version = "5.19"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
 //***************HEADER**************************
+
+
 ?>
 <html>
 <head>
@@ -110,9 +115,9 @@ if (isset($_POST[user])) {
 //End of security configuration
 
 
-if (!(file_exists('.img/'))) {mkdir('.img/');}
+if (!(file_exists('.img/'))) {mkdir('.img/');} //cheack .img/ folder existance
 
-$files1 = scandir('.',1); //lista dei file attuali in ordine inverso
+$files1 = scandir('.',1); //file list in reverse order
 
 //removing not video, not image, not audio, hidden files from file list
 $all_exts = array_merge($videos, $images, $audios); //all extensions
@@ -121,7 +126,7 @@ foreach	($files1 as $value) {
  	$test = false ;
  	if (is_dir($value)) {$test = true ;} else {  //we show directories
 		$ext = end(explode('.', $value)); //we get file extension
-		$ext = strtolower($ext); //we trasnform extension in lower letters
+		$ext = strtolower($ext); //we transform extension in lower letters
 		foreach ($all_exts as $value2) {
 			if ( $value2 == $ext ) { $test = true ;} //it's something to show
 			}
@@ -167,12 +172,9 @@ if (strpos($temp2,"/") === false ) {
 	}
 
 
-//krsort($files_temp);
 
 
-
-
-$files1 = array_values($files_temp);
+$files1 = array_values($files_temp); //indexes array numerically ([0] , [1], [2], ... )
 
 //Creating list of only images, without folders
 $temp = 0;
@@ -181,7 +183,7 @@ foreach	($files3 as $value) {
  	if (is_dir($value)) {	unset($files3[$temp]);}
  	$temp = $temp + 1;
  		}
-$files3 = array_values($files3) ;
+$files3 = array_values($files3) ; //indexes array numerically ([0] , [1], [2], ... )
 
 //Useful function to remove unwanted charachters, for example ""underscore":
 function removeunder ($arg) {
@@ -190,7 +192,7 @@ function removeunder ($arg) {
 	return $tag;
 }
 
-//let's create a thumb for this folder, if it contains images
+//Function to create a thumb preview inside folders, if it contains images
 function folder_preview ($arg) {
  	global $images, $max1_x, $max1_y; 	
  	$test = false; 
@@ -248,7 +250,8 @@ function createthumb ($name,$filename,$new_w,$new_h){
 		$thumb_h = $new_w*($old_y/$old_x) ;
 		}
 	$dst_img = ImageCreateTrueColor($thumb_w,$thumb_h);	
-	imagecopyresampled($dst_img,$src_img,0,0,0,0,$thumb_w,$thumb_h,$old_x,$old_y); 
+	//imagecopyresampled($dst_img,$src_img,0,0,0,0,$thumb_w,$thumb_h,$old_x,$old_y); 
+	imagecopyresized($dst_img,$src_img,0,0,0,0,$thumb_w,$thumb_h,$old_x,$old_y); 
 	$system = pathinfo($filename);
 	if (preg_match("/png/i",$system['extension'])) { imagepng($dst_img,$filename); }		
 	if (preg_match("/jpg|jpeg/i",$system['extension'])) { imagejpeg($dst_img,$filename); }
@@ -258,7 +261,7 @@ function createthumb ($name,$filename,$new_w,$new_h){
 	return ;
 	}
 
-//make_shot function crate all the previews (folders or images)
+//make_shot function crates all the previews pages, containting $max_file_pa images or folders
 function make_shot ($arg ) {
  	global $images , $videos , $max1_x , $max1_y , $audios , $jw_videos , $jw_audios, $base_url ;
  	//check if it's a folder
@@ -400,7 +403,7 @@ function directory_navigation_links()         {
          }
 
 
-//This function create the table with image of directories and single images/videos
+//This function create the table with image of directories and images/videos
 function buildtable () {
 	global $page, $max_file_pa, $files1, $max_file_p_pa_h, $max_file_p_pa_v, $pages ;
  	directory_navigation_links() ;
@@ -463,7 +466,7 @@ function buildpage ($arg) {
 				$newname = ".img/{$max2_x}x{$max2_y}_{$arg}";
 				createthumb($arg,$newname,$max2_x,$max2_y);
 				} 	
-			echo "<br><a href=\"$arg\"><img class=image2 src=\".img/{$max2_x}x{$max2_y}_{$arg}\"></a><br>"	;
+			echo "<br><a href=\"$arg\"><img class=image2 src=\".img/{$max2_x}x{$max2_y}_{$arg}\"  ></a><br><i><small>(click on image to see real size)</small></i><br>"	;
 			}
 		}
 	foreach ($videos as $value2) {
@@ -557,7 +560,9 @@ if (!(isset($uffizzi[user])) && !(isset($_GET[Logon])) )  {
 	}
 ?>
 <br>
-Best viewed with <a href="http://www.google.com/chrome" target="_blank" >Google Chrome</a></i></small>
+<?php 
+echo "<a href=http://www.anybrowser.org/campaign/ > <img src=http://$base_url/.css/chevipare.gif ></a>";
+?>
 </div></div></div>
 </body>
 </html>

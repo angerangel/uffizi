@@ -20,7 +20,7 @@ Benefits:
 
 It's simple and easy to configure and adapt to your site. It's under GPL.
 
-You can see a '''demo''' here: http://www.maxvessi.net/uffizi/pictures/
+You can see a **demo** here: http://www.maxvessi.net/uffizi/
 
 You can download here: https://github.com/angerangel/uffizi/archive/master.zip
 
