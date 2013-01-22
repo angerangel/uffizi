@@ -1,0 +1,11 @@
+AddType audio/mpeg .mp3
+AddType audio/vnd.wave .wav
+AddType audio/midi  .mid
+AddType audio/ogg  .ogg
+AddType video/webm .webm
+AddType video/mp4 .mp4
+AddType video/3gpp .3gp
+AddType video/avi .avi
+AddType video/x-ms-wmv .wmv
+AddType video/ogg .ogv
+AddType video/x-flv .flv
