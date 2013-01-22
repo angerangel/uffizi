@@ -5,7 +5,7 @@ ini_set('display_errors',0);
 //*************************************
 
 //****Configuration*****
-ini_set('memory_limit', '100M'); //set the memeroy usage, with bug images you need a lot of memory!
+ini_set('memory_limit', '100M'); //set the memeroy usage, with big images you need a lot of memory!
 $max_file_p_pa_h = 4 ; //max files per pag hor
 $max_file_p_pa_v = 4 ; //max files per pag ver
 $max_file_pa = $max_file_p_pa_v * $max_file_p_pa_h ; //max files per page
