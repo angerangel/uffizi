@@ -36,7 +36,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "5.19"; 
+$version = "5.20"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
@@ -325,9 +325,8 @@ function make_shot ($arg ) {
 					<a href=\"{$_SERVER['PHP_SELF']}?img=$arg\" > 
 				 	<div id=\"container\" >Carico il lettore ...</div>
 					<script type=\"text/javascript\">
-					jwplayer(\"container\").setup({
-					flashplayer: \"http://$base_url/.jwplayer/player.swf\",
-					controlbar: \"none\" ,
+					jwplayer(\"container\").setup({					
+					controls: false ,
 					file: \"$arg\",
 					height: $max1_y ,
 					width: $max1_x
@@ -348,9 +347,8 @@ function make_shot ($arg ) {
 					<a href=\"{$_SERVER['PHP_SELF']}?img=$arg\" > 
 				 	<div id=\"container\" >Carico il lettore ...</div>
 					<script type=\"text/javascript\">
-					jwplayer(\"container\").setup({
-					flashplayer: \"http://$base_url/.jwplayer/player.swf\",
-					controlbar: \"none\" ,
+					jwplayer(\"container\").setup({					
+					controls: false ,
 					file: \"$arg\",
 					height: $max1_y ,
 					width: $max1_x
@@ -477,8 +475,7 @@ function buildpage ($arg) {
 			 	echo "
 			 	<div id=\"container\" >Carico il lettore ...</div>
 				<script type=\"text/javascript\">
-				jwplayer(\"container\").setup({
-				flashplayer: \"http://$base_url/.jwplayer/player.swf\",
+				jwplayer(\"container\").setup({				
 				autostart: true,
 				file: \"$arg\",
 				height: $max2_y ,
@@ -498,8 +495,7 @@ function buildpage ($arg) {
 			 	echo "
 			 	<div id=\"container\" >Carico il lettore ...</div>
 				<script type=\"text/javascript\">
-				jwplayer(\"container\").setup({
-				flashplayer: \"http://$base_url/.jwplayer/player.swf\",
+				jwplayer(\"container\").setup({				
 				autostart: true,
 				file: \"$arg\",
 				height: $max2_y ,
