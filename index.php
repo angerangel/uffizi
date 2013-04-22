@@ -36,7 +36,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "5.20"; 
+$version = "5.21"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
@@ -44,15 +44,20 @@ $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
 
 ?>
+
 <html>
+
 <head>
 <link rel="stylesheet" type="text/css" <?php echo "href=http://$base_url/.css/mystyle.css />"; ?>
 <?php echo "<script type=\"text/javascript\" src=\"http://$base_url/.jwplayer/jwplayer.js\"></script>"; ?>
 </head>
+
+
 <body>
 <DIV ALIGN="CENTER">
 <div id=topleft > 
 <div id=bottomright >
+
 <h1>UFFIZI <i>web gallery</i></h1>
 
 
@@ -113,7 +118,7 @@ if (isset($_POST[user])) {
 
 
 //End of security configuration
-
+//Starting folder analasys
 
 if (!(file_exists('.img/'))) {mkdir('.img/');} //cheack .img/ folder existance
 
@@ -401,7 +406,7 @@ function directory_navigation_links()         {
          }
 
 
-//This function create the table with image of directories and images/videos
+//This function create the table with images of directories and images/videos
 function buildtable () {
 	global $page, $max_file_pa, $files1, $max_file_p_pa_h, $max_file_p_pa_v, $pages ;
  	directory_navigation_links() ;
@@ -413,7 +418,16 @@ function buildtable () {
 	 	for ($i = 0; $i < $deleting; $i++) {
 		 	array_shift($files1);
 	 		}
-		}	
+		}
+	
+	//navigation link creation operations:
+	$prev = $page - 1 ;	
+	echo "<table width=100% ><tr><td align=left valign=middle >";
+	if ($page > 1) { echo "<a href=\"index.php?page=$prev\"> &lt;&lt;</a>";} 
+	echo "</td><td align=center>";
+	$next = $page + 1 ;
+	
+			
 	//building main table with images
 	echo "\n<table cellspacing=5 >\n";
 	$temp1 = 0; //horizontal
@@ -432,7 +446,11 @@ function buildtable () {
 			if ($temp2 == $max_file_p_pa_v) {break;}
 		}
 	echo "</table>"; 
-	$prev = $page - 1 ;	
+	//rigth navigation
+	echo "</td><td valign=middle align=rigth>";
+	if ($page < $pages ) {echo "<a href=\"index.php?page=$next\"> &gt;&gt;</a>";}
+	echo "</td></tr></table>";
+
 	if ($page > 1) { echo "<a href=\"index.php?page=$prev\"> &lt;&lt; Prev</a>";} 
 	if ($page > 1 && $page < $pages ) {echo " / ";}
 	$next = $page + 1 ;
@@ -448,7 +466,7 @@ function buildtable () {
 	}
 
 
-//This function builds pages with single screenshot of phots, videos, etc.
+//This function builds a page with a single screenshot of a photo or video or ...
 function buildpage ($arg) {
  	global $videos, $images, $base_url , $max2_x, $max2_y , $files3, $files3_n , $audios, $jw_videos, $jw_audios;
  	directory_navigation_links() ;	
@@ -456,6 +474,22 @@ function buildpage ($arg) {
  	$system = pathinfo($arg);
  	$ext = $system['extension']; //we get file extension
 	$ext = strtolower($ext); //we trasnform extension in lower letters
+	//navigation links operation
+	$temp = array_search( $arg, $files3) ;	
+	$prev = $temp - 1 ; //prev array item, not page!
+	$page = $temp + 1 ; //actual page
+	$next = $temp + 1 ; //next array item, not page!
+	$pages = count($files3);
+	$last = $pages - 1; //last array item
+	echo "<br>"	;
+	    //left navigation
+	echo "<table width=100% ><tr><td valign=middle align=left >";
+	if ($page > 1) { echo "<a href=\"index.php?img=$files3[$prev]\">&lt;&lt; </a>";} 
+	echo "</td><td align=center >";
+
+
+	//end of navigation links operation
+	
 	//check if it's a image
 	foreach ($images as $value2) {
 		if ($ext == $value2 ) {
@@ -464,7 +498,7 @@ function buildpage ($arg) {
 				$newname = ".img/{$max2_x}x{$max2_y}_{$arg}";
 				createthumb($arg,$newname,$max2_x,$max2_y);
 				} 	
-			echo "<br><a href=\"$arg\"><img class=image2 src=\".img/{$max2_x}x{$max2_y}_{$arg}\"  ></a><br><i><small>(click on image to see real size)</small></i><br>"	;
+			echo "<a href=\"$arg\"><img class=image2 src=\".img/{$max2_x}x{$max2_y}_{$arg}\"  ></a><br><i><small>(click on image to see real size)</small></i>"	;
 			}
 		}
 	foreach ($videos as $value2) {
@@ -483,7 +517,7 @@ function buildpage ($arg) {
 				});
 				</script>" ;
 				} else { //else we'll use HTML 5
-				echo "<a href=\"$arg\"><video src=\"$arg\" width=$max2_x heigth=$max2_y controls=\"controls\" > $arg <br><small>(your browser does not support the video tag)</small></audio></a><br>";	
+				echo "<a href=\"$arg\"><video src=\"$arg\" width=$max2_x heigth=$max2_y controls=\"controls\" > $arg <br><small>(your browser does not support the video tag)</small></audio></a>";	
 				}
 			}	
 		}
@@ -503,18 +537,16 @@ function buildpage ($arg) {
 				});
 				</script>" ;
 				} else { //else we'll use HTML 5
-		 			echo "<a href=\"$arg\"><audio src=\"$arg\" width=$max2_x  controls=\"controls\" > $arg <br><small>(your browser does not support the audio tag)</small></audio></a><br>";
+		 			echo "<a href=\"$arg\"><audio src=\"$arg\" width=$max2_x  controls=\"controls\" > $arg <br><small>(your browser does not support the audio tag)</small></audio></a>";
 		 			}
 			} 
 		}		
-	//***	
-	//krsort($files3) ;
-	$temp = array_search( $arg, $files3) ;	
-	$prev = $temp - 1 ; //prev array item, not page!
-	$page = $temp + 1 ; //actual page
-	$next = $temp + 1 ; //next array item, not page!
-	$pages = count($files3);
-	$last = $pages - 1; //last array item	
+	//***
+	//right navigation
+	echo "</td><td alig=right >";
+	if ($page < $pages ) {echo "<a href=\"index.php?img=$files3[$next]\">&gt;&gt;</a>";}	
+	echo "</td></tr></table><br>";
+	
 	if ($page > 1) { echo "<a href=\"index.php?img=$files3[$prev]\">&lt;&lt; Prev</a>";} 
 	if ($page > 1 && $page < $pages ) {echo " / ";}
 	if ($page < $pages ) {echo "<a href=\"index.php?img=$files3[$next]\">Next &gt;&gt;</a>";}
@@ -530,18 +562,21 @@ function buildpage ($arg) {
 	}
 
 
-//Now we write the navigation link on the bottom of the page
+//Now we write the page ()and the navigation link on the bottom of the page):
+//no get: standard table page
 if ( empty($_GET['page']) && empty($_GET['img']) ) { 
 	$page = 1;
-	buildtable()  ;}  //no get: standard table page
+	buildtable()  ;}  
+//Get with page: table at that page	
 if ($_GET['page']) { 
 	$page = $_GET['page']; 
 	buildtable() ;
-	} //Get with page: table at that page
+	} 
+//Get with image: image gallery 
 if ($_GET['img']) { 
  	$image = $_GET['img'] ;
 	buildpage($image) ;
-	} //Get with image: image gallery 
+	} 
 	
 
 ?>

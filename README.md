@@ -37,20 +37,30 @@ You can write an email to request a feature: maxint@tiscali.it
 
 
 ## Changelog
+
+5.21
+
+* Added navigation link for mobile devices
+
 4.17  _7/8/2012_
+
 * Added JWplayer 
 * Changed sort order, inverted for HOME and direct for subfolders
 
 3.14 _9/12/2011_
+
 * Removed photo order bug
 
 3.12  _7/9/2011_
+
 * Corrected secret photos order
 
 3.10 _15/11/2011_
+
 * Better CSS
 
 3.8 _16/Sep/2011_
+
 * CSS support
 
 2.6 _3/Aug/2011_
