@@ -36,7 +36,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "5.21"; 
+$version = "6.22"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
@@ -99,7 +99,7 @@ if (isset($_POST[user])) {
 	$password = $_POST[password];
 	}  
  	
- if (isset($user) && ($password == $passwords[$user]) ) {
+ if (isset($user) && ($password === $passwords[$user]) ) {
  	 	setcookie("uffizzi[user]",$user, time() +2592000 );
 		setcookie("uffizzi[password]",$password, time() +2592000 );
  	 	$level = $levels[$user];
@@ -115,9 +115,8 @@ if (isset($_POST[user])) {
 			 	setcookie("uffizzi[password]","", time()-3600);	
 				}
 			}
-
-
 //End of security configuration
+
 //Starting folder analasys
 
 if (!(file_exists('.img/'))) {mkdir('.img/');} //cheack .img/ folder existance
@@ -369,42 +368,79 @@ function make_shot ($arg ) {
 	return ;
 	}
 
-//building navigation
+//building TOP navigation links functions
+//We store current url in an array, the array in a cookie
+
+if (isset($_COOKIE['UFFIZIHIST'])) {
+	$uff_hist = unserialize(base64_decode($_COOKIE['UFFIZIHIST']));
+	//uncmment for debug
+	/*echo "<br>*****************<br>";	
+	print_r($uff_hist);
+	echo "<br>*****************<br>";
+	*/
+	} else {
+	$uff_hist = array() ;
+	}
+
+
+
+
 function directories()   {         
-         $directory = $_SERVER["PHP_SELF"]; //esempio /temp/prova3.php
-	     $directories = array();
-         $next_slash = 0;
-         do {//Creates an array with all the parent folders
-             //of the file where this function is called.
-            $next_slash = strpos($directory, "/", $next_slash); //trova la prima / = 0 poi 5
-            if($next_slash !== false)
-              {
-              $next_slash++;
-              $directories[count($directories)] = substr($directory, 0, $next_slash); // prina / poi /temp/
-              }
+	$directory = $_SERVER["PHP_SELF"]; //esempio /temp/prova3.php
+	$directories = array();
+        $next_slash = 0;
+        do {
+		//Creates an array with all the parent folders
+		//of the file where this function is called.
+		$next_slash = strpos($directory, "/", $next_slash); //trova la prima / = 0 poi 5
+		if($next_slash !== false)  {
+			$next_slash++;
+			$directories[count($directories)] = substr($directory, 0, $next_slash); // prina / poi /temp/
+			}
             } while($next_slash !== false);
-	     return($directories);
-         }
+	   $temp2 =  end(array_values($directories)) ;
+	
+	return($directories);
+        }
 
 //Uses the directories() function to create the navigation links. 
-function directory_navigation_links()         {
-  	 		global $base_url ;
-  	 		$index = substr_count($base_url, '/');
-			$temp = substr_count($base_url, '/');
-         $directories = directories();
-         $links = "";
-         for($index ; $index < count($directories); $index++)
-            {
+function directory_navigation_links()  {
+	global $base_url ; //example: 'www.maxvessi.net/uffizi/pictures' 
+  	$index = substr_count($base_url, '/'); //it returns the number of '/', example: it returns 2
+	$temp = substr_count($base_url, '/'); 
+	$directories = directories(); //an array of directories of the current path	
+	$links = "";
+	global $uff_hist;   
+	$numerodir =count($directories) ;
+	$numerodir2 = $numerodir - 1;
+        for($index ; $index < $numerodir ; $index++) {
             //Handling the display is a little harder than the links themselves.
             $dir_name = substr($directories[$index], 0, strlen($directories[$index]) - 1);
             $dir_name = substr($dir_name, strrpos($dir_name, "/") + 1, strlen($dir_name) - 1);
-            if($index == $temp) {              $links .= "<a href=\"" . $directories[$index] . "\">Home</a>  / ";} else {            
-            	$links .= "<a href=\"" . $directories[$index] . "\">" . $dir_name . "</a> / ";
-				}
-            }
+            if($index == $temp) {             		
+		//it's the home
+		if ($uff_hist[$dir_name] != ''){	
+			$links .= "<a href=\"" . $uff_hist[$dir_name] . "\">Home</a> / ";		
+			} else{		
+			$links .= "<a href=\"" . $directories[$index] . "\">Home</a>  / ";
+			}
+		} else {            
+			if ($uff_hist[$dir_name] != ''){		
+			$links .= "<a href=\"" . $uff_hist[$dir_name] . "\">" . $dir_name . "</a> / ";
+			} else{		
+			$links .= "<a href=\"" . $directories[$index] . "\">" . $dir_name . "</a> / ";
+			}			
+		}		
+		If ($index == $numerodir2) {
+			// we are arrived a the current directory
+			$uff_hist[$dir_name] = "http://" . $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"]; //store current path
+			$temp3 =  base64_encode(serialize( $uff_hist));
+			setcookie("UFFIZIHIST",$temp3,time()+60*60*24);						
+			}
+		}
          echo "<i>$links</i>" ;
-         }
-
+	}
+//END of buoling top navigation links functions
 
 //This function create the table with images of directories and images/videos
 function buildtable () {
