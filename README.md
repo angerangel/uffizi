@@ -24,46 +24,23 @@ You can see a **demo** here: http://www.maxvessi.net/uffizi/
 
 You can download here: https://github.com/angerangel/uffizi/archive/master.zip
 
-You can write an email to request a feature: maxint@tiscali.it
+You can write an email to request a feature: angerangel@gmail.com
 
 ## INSTALL
 * Extract the zip archive and put all files in your main folder
 * Set the *$base_url* with the adress or your main folder
 * You can add any number of users and passwords
 * Every file to protect must start with a *-*, every minus sign is a level of protection
-* Eventually modify the other configuration variable accordly to your needs (images per page, sizes, memory, etc.)
-* Eventually modify CSS as you like
+* Modify the other configuration variable accordly to your needs (images per page, sizes, memory, etc.)
+* Modify CSS as you like
+* Upload files and folders by FTP, this way you skip PHP file size limitations
 
-
+![Example](http://www.maxvessi.net/pmwiki/uploads/Main/Uffizi6.jpg)
 
 ## Changelog
 
-5.21
+Uffizi web gallery is now on github, you can see changelog here: https://github.com/angerangel/uffizi/commits/master
 
-* Added navigation link for mobile devices
+##New features
 
-4.17  _7/8/2012_
-
-* Added JWplayer 
-* Changed sort order, inverted for HOME and direct for subfolders
-
-3.14 _9/12/2011_
-
-* Removed photo order bug
-
-3.12  _7/9/2011_
-
-* Corrected secret photos order
-
-3.10 _15/11/2011_
-
-* Better CSS
-
-3.8 _16/Sep/2011_
-
-* CSS support
-
-2.6 _3/Aug/2011_
-* Better page numbering 
-
-
+If you are not a programmer, but you need a new feature, just send a donation to angerangel@gmail.com by Paypal describing what you want.

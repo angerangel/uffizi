@@ -36,7 +36,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "6.22"; 
+$version = "6.24"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
@@ -239,7 +239,7 @@ function createthumb ($name,$filename,$new_w,$new_h){
 	if (preg_match('/png/i',$system['extension'])) { $src_img=imagecreatefrompng($name); }
 	if (preg_match('/gif/i',$system['extension'])) { $src_img=imagecreatefromgif($name); }
 	$old_x = imageSX($src_img);
-	$old_y = imageSY($src_img);
+	$old_y = imageSY($src_img);	
 	if ($old_x > $old_y) {
 		$thumb_w = $new_w; 
 		$thumb_h = $new_w*($old_y/$old_x) ; //$old_y*($new_h/$old_x);
@@ -617,7 +617,7 @@ if ($_GET['img']) {
 
 ?>
 <br><br>
-<small><i>Powered by <a href="http://www.maxvessi.net/pmwiki/pmwiki.php?n=Main.UffiziWebGallery">Uffizi web gallery</a>
+<small><i>Powered by <a href="http://angerangel.github.io/uffizi/">Uffizi web gallery</a>
 <?php echo " $version"; 
 if (!(isset($uffizzi[user])) && !(isset($_GET[Logon])) )  {
 	echo " - <a href=\"{$_SERVER['php_self']}?Logon=yes";
@@ -628,8 +628,10 @@ if (!(isset($uffizzi[user])) && !(isset($_GET[Logon])) )  {
 ?>
 <br>
 <?php 
-echo "<a href=http://www.anybrowser.org/campaign/ > <img src=http://$base_url/.css/chevipare.gif ></a>";
+echo "<a href=http://www.anybrowser.org/campaign/ > <img src=http://$base_url/.css/biga.gif ></a>";
 ?>
-</div></div></div>
+</div>
+</div>
+</div>
 </body>
 </html>
