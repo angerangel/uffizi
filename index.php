@@ -36,7 +36,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "6.24"; 
+$version = "6.25"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
@@ -444,7 +444,7 @@ function directory_navigation_links()  {
 
 //This function create the table with images of directories and images/videos
 function buildtable () {
-	global $page, $max_file_pa, $files1, $max_file_p_pa_h, $max_file_p_pa_v, $pages ;
+	global $page, $max_file_pa, $files1, $max_file_p_pa_h, $max_file_p_pa_v, $pages, $max2_y, $base_url ;
  	directory_navigation_links() ;
 	//****Bulding album page	
 	//not we delete item from list already in prev pages
@@ -458,8 +458,9 @@ function buildtable () {
 	
 	//navigation link creation operations:
 	$prev = $page - 1 ;	
+	//left arrow
 	echo "<table width=100% ><tr><td align=left valign=middle >";
-	if ($page > 1) { echo "<a href=\"index.php?page=$prev\"> &lt;&lt;</a>";} 
+	if ($page > 1) { echo "<a href=\"index.php?page=$prev\"><img src=http://$base_url/.css/leftarrow.png  height=$max2_y width=50 ></a>";} 
 	echo "</td><td align=center>";
 	$next = $page + 1 ;
 	
@@ -482,9 +483,9 @@ function buildtable () {
 			if ($temp2 == $max_file_p_pa_v) {break;}
 		}
 	echo "</table>"; 
-	//rigth navigation
+	//rigth navigation arrows
 	echo "</td><td valign=middle align=rigth>";
-	if ($page < $pages ) {echo "<a href=\"index.php?page=$next\"> &gt;&gt;</a>";}
+	if ($page < $pages ) {echo "<a href=\"index.php?page=$next\"><img src=http://$base_url/.css/rigtharrow.png  height=$max2_y width=50 ></a>";}
 	echo "</td></tr></table>";
 
 	if ($page > 1) { echo "<a href=\"index.php?page=$prev\"> &lt;&lt; Prev</a>";} 
@@ -518,9 +519,9 @@ function buildpage ($arg) {
 	$pages = count($files3);
 	$last = $pages - 1; //last array item
 	echo "<br>"	;
-	    //left navigation
+	    //left navigation with arrows
 	echo "<table width=100% ><tr><td valign=middle align=left >";
-	if ($page > 1) { echo "<a href=\"index.php?img=$files3[$prev]\">&lt;&lt; </a>";} 
+	if ($page > 1) { echo "<a href=\"index.php?img=$files3[$prev]\"><img src=http://$base_url/.css/leftarrow.png  height=$max2_y width=50 ></a>";} 
 	echo "</td><td align=center >";
 
 
@@ -580,7 +581,7 @@ function buildpage ($arg) {
 	//***
 	//right navigation
 	echo "</td><td alig=right >";
-	if ($page < $pages ) {echo "<a href=\"index.php?img=$files3[$next]\">&gt;&gt;</a>";}	
+	if ($page < $pages ) {echo "<a href=\"index.php?img=$files3[$next]\"><img src=http://$base_url/.css/rigtharrow.png  height=$max2_y width=50 ></a>";}	
 	echo "</td></tr></table><br>";
 	
 	if ($page > 1) { echo "<a href=\"index.php?img=$files3[$prev]\">&lt;&lt; Prev</a>";} 
