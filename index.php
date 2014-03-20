@@ -36,7 +36,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "6.25"; 
+$version = "6.26"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 

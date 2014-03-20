@@ -4,14 +4,14 @@ body {
 	background-repeat:repeat-x;
 	}
 #topleft  {
-	background: url('top_left.png')  ;
+	/*background: url('top_left.png')  ;*/
 	background-repeat:no-repeat;
     background-position:left top;
 	}	
 
 
 #bottomright  {
-	background: url('bottom_right.png')  ;
+	/*background: url('bottom_right.png')  ;*/
 	background-repeat:no-repeat;
     background-position:right bottom;
 	}			

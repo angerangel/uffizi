@@ -35,7 +35,7 @@ You can write an email to request a feature: angerangel@gmail.com
 * Modify CSS as you like
 * Upload files and folders by FTP, this way you skip PHP file size limitations
 
-![Example](http://www.maxvessi.net/pmwiki/uploads/Main/Uffizi6.jpg)
+![Example](http://www.maxvessi.net/pmwiki/uploads/Main/Uffizi9.jpg)
 
 ## Changelog
 
