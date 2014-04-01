@@ -36,7 +36,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "6.26"; 
+$version = "6.36"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
@@ -49,6 +49,7 @@ $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
 <head>
 <link rel="stylesheet" type="text/css" <?php echo "href=http://$base_url/.css/mystyle.css />"; ?>
+<!-- JWPlayer configuration -->
 <?php echo "<script type=\"text/javascript\" src=\"http://$base_url/.jwplayer/jwplayer.js\"></script>"; ?>
 </head>
 
@@ -323,7 +324,7 @@ function make_shot ($arg ) {
 	//check if it's a video	
 	foreach ($videos as $value2) {
 		if ($ext == $value2) {
-		 	//Control if it's supported by JWPlayer
+		 	//Check if it's supported by JWPlayer
 		 	if (in_array($ext, $jw_videos)) {
 				echo "<td align=center valign=middle width=$max1_x >
 					<a href=\"{$_SERVER['PHP_SELF']}?img=$arg\" > 
@@ -331,6 +332,7 @@ function make_shot ($arg ) {
 					<script type=\"text/javascript\">
 					jwplayer(\"container\").setup({					
 					controls: false ,
+					autostart: true,
 					file: \"$arg\",
 					height: $max1_y ,
 					width: $max1_x
