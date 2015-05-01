@@ -36,7 +36,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "6.36"; 
+$version = "7.36"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
@@ -232,11 +232,33 @@ $temp = $files2 / $max_file_pa ;
 $pages = ceil( $temp) ; //number of pages
 
 
+//Function to get EXIF orientation data
+ function imagecreatefromjpegexif($filename)
+    {
+        $img = imagecreatefromjpeg($filename);
+        $exif = exif_read_data($filename);
+        if ($img && $exif && isset($exif['Orientation']))
+        {
+            $ort = $exif['Orientation'];
+
+            if ($ort == 6 || $ort == 5)
+                $img = imagerotate($img, 270, null);
+            if ($ort == 3 || $ort == 4)
+                $img = imagerotate($img, 180, null);
+            if ($ort == 8 || $ort == 7)
+                $img = imagerotate($img, 90, null);
+
+            if ($ort == 5 || $ort == 4 || $ort == 7)
+                imageflip($img, IMG_FLIP_HORIZONTAL);
+        }
+        return $img;
+    }
+
 //Preview functions:
 //resizing function
 function createthumb ($name,$filename,$new_w,$new_h){
 	$system = pathinfo($name);
-	if (preg_match('/jpg|jpeg/i',$system['extension'])) { $src_img=imagecreatefromjpeg($name); }
+	if (preg_match('/jpg|jpeg/i',$system['extension'])) { $src_img=imagecreatefromjpegexif($name); }
 	if (preg_match('/png/i',$system['extension'])) { $src_img=imagecreatefrompng($name); }
 	if (preg_match('/gif/i',$system['extension'])) { $src_img=imagecreatefromgif($name); }
 	$old_x = imageSX($src_img);
