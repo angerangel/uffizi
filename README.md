@@ -16,7 +16,7 @@ Benefits:
 * you can choose images size, thumbnails size, numers of elements per page, sort order, and so on...
 * you can protect files or folders, with any number or level/users/passwords!
 * CSS support
-* it uses JWplayer
+* it uses JWplayer ( https://developer.jwplayer.com/jw-player/ )
 
 It's simple and easy to configure and adapt to your site. It's under GPL.
 
