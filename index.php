@@ -10,6 +10,7 @@ $max_file_p_pa_h = 4 ; //max files per pag hor
 $max_file_p_pa_v = 4 ; //max files per pag ver
 $max_file_pa = $max_file_p_pa_v * $max_file_p_pa_h ; //max files per page
 $base_url = 'www.maxvessi.net/uffizi/pictures' ; //you must put your main folder without http://
+$searchboxprefill = 'Cerca'; //here you put the 
 $max1_x = 100 ; //max x size for preview images
 $max1_y = 100 ; //max y size for preview images
 $max2_x = 640 ; //max x size big photos
@@ -36,7 +37,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "7.36"; 
+$version = "8.0"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 
@@ -60,6 +61,11 @@ $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
 <div id=bottomright >
 
 <h1>UFFIZI <i>web gallery</i></h1>
+
+<?php 
+//box di ricerca
+echo "<iframe src=\"https://duckduckgo.com/search.html?width=220&site=" .  $base_url . "&prefill=" . $searchboxprefill ."\" style=\"overflow:hidden;margin:0;padding:0;width:278px;height:40px;\" frameborder=0></iframe>" ;
+?>
 
 
 <?php
