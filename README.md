@@ -41,6 +41,6 @@ You can write an email to request a feature: angerangel@gmail.com
 
 Uffizi web gallery is now on github, you can see changelog here: https://github.com/angerangel/uffizi/commits/master
 
-##New features
+## New features
 
 If you are not a programmer, but you need a new feature, just send a donation to angerangel@gmail.com by Paypal describing what you want.
