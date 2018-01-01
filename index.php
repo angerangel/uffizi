@@ -37,11 +37,59 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "8.0"; 
+$version = "8.1"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
-
+ $videocounter = 0 ;
 //***************HEADER**************************
+
+
+//***********GPS reading function*******************
+/**
+ * Returns an array of latitude and longitude from the Image file
+ * @param image $file
+ * @return multitype:number |boolean
+ */
+function read_gps_location($file){
+    if (is_file($file)) {
+        $info = exif_read_data($file);
+        if (isset($info['GPSLatitude']) && isset($info['GPSLongitude']) &&
+            isset($info['GPSLatitudeRef']) && isset($info['GPSLongitudeRef']) &&
+            in_array($info['GPSLatitudeRef'], array('E','W','N','S')) && in_array($info['GPSLongitudeRef'], array('E','W','N','S'))) {
+
+            $GPSLatitudeRef  = strtolower(trim($info['GPSLatitudeRef']));
+            $GPSLongitudeRef = strtolower(trim($info['GPSLongitudeRef']));
+
+            $lat_degrees_a = explode('/',$info['GPSLatitude'][0]);
+            $lat_minutes_a = explode('/',$info['GPSLatitude'][1]);
+            $lat_seconds_a = explode('/',$info['GPSLatitude'][2]);
+            $lng_degrees_a = explode('/',$info['GPSLongitude'][0]);
+            $lng_minutes_a = explode('/',$info['GPSLongitude'][1]);
+            $lng_seconds_a = explode('/',$info['GPSLongitude'][2]);
+
+            $lat_degrees = $lat_degrees_a[0] / $lat_degrees_a[1];
+            $lat_minutes = $lat_minutes_a[0] / $lat_minutes_a[1];
+            $lat_seconds = $lat_seconds_a[0] / $lat_seconds_a[1];
+            $lng_degrees = $lng_degrees_a[0] / $lng_degrees_a[1];
+            $lng_minutes = $lng_minutes_a[0] / $lng_minutes_a[1];
+            $lng_seconds = $lng_seconds_a[0] / $lng_seconds_a[1];
+
+            $lat = (float) $lat_degrees+((($lat_minutes*60)+($lat_seconds))/3600);
+            $lng = (float) $lng_degrees+((($lng_minutes*60)+($lng_seconds))/3600);
+
+            //If the latitude is South, make it negative. 
+            //If the longitude is west, make it negative
+            $GPSLatitudeRef  == 's' ? $lat *= -1 : '';
+            $GPSLongitudeRef == 'w' ? $lng *= -1 : '';
+
+            return array(
+                'lat' => $lat,
+                'lng' => $lng
+            );
+        }           
+    }
+    return false;
+}
 
 
 ?>
@@ -296,7 +344,7 @@ function createthumb ($name,$filename,$new_w,$new_h){
 
 //make_shot function crates all the previews pages, containting $max_file_pa images or folders
 function make_shot ($arg ) {
- 	global $images , $videos , $max1_x , $max1_y , $audios , $jw_videos , $jw_audios, $base_url ;
+ 	global $images , $videos , $max1_x , $max1_y , $audios , $jw_videos , $jw_audios, $base_url , $videocounter;
  	//check if it's a folder
  	$text = removeunder($arg);
  	if (is_dir($arg)) { 
@@ -350,15 +398,17 @@ function make_shot ($arg ) {
 			}
 		}
 	//check if it's a video	
+	
 	foreach ($videos as $value2) {
 		if ($ext == $value2) {
 		 	//Check if it's supported by JWPlayer
 		 	if (in_array($ext, $jw_videos)) {
+		 			$videocounter = $videocounter + 1 ;
 				echo "<td align=center valign=middle width=$max1_x >
 					<a href=\"{$_SERVER['PHP_SELF']}?img=$arg\" > 
-				 	<div id=\"container\" >Carico il lettore ...</div>
+				 	<div id=\"container$videocounter\"  >Carico il lettore ...</div>
 					<script type=\"text/javascript\">
-					jwplayer(\"container\").setup({					
+					jwplayer(\"container$videocounter\").setup({					
 					controls: false ,
 					autostart: true,
 					file: \"$arg\",
@@ -377,11 +427,12 @@ function make_shot ($arg ) {
 		if ($ext == $value2) {
 		 	//Control if it's supported by JWPlayer
 		 	if (in_array($ext, $jw_audios)) {
+		 		$videocounter = $videocounter + 1 ;
 				echo "<td align=center valign=middle width=$max1_x >
 					<a href=\"{$_SERVER['PHP_SELF']}?img=$arg\" > 
-				 	<div id=\"container\" >Carico il lettore ...</div>
+				 	<div id=\"container$videocounter\" >Carico il lettore ...</div>
 					<script type=\"text/javascript\">
-					jwplayer(\"container\").setup({					
+					jwplayer(\"container$videocounter\").setup({					
 					controls: false ,
 					file: \"$arg\",
 					height: $max1_y ,
@@ -474,7 +525,7 @@ function directory_navigation_links()  {
 
 //This function create the table with images of directories and images/videos
 function buildtable () {
-	global $page, $max_file_pa, $files1, $max_file_p_pa_h, $max_file_p_pa_v, $pages, $max2_y, $base_url ;
+	global $page, $max_file_pa, $files1, $max_file_p_pa_h, $max_file_p_pa_v, $pages, $max2_y, $base_url, $videocounter ;
  	directory_navigation_links() ;
 	//****Bulding album page	
 	//not we delete item from list already in prev pages
@@ -535,9 +586,10 @@ function buildtable () {
 
 //This function builds a page with a single screenshot of a photo or video or ...
 function buildpage ($arg) {
- 	global $videos, $images, $base_url , $max2_x, $max2_y , $files3, $files3_n , $audios, $jw_videos, $jw_audios;
- 	directory_navigation_links() ;	
- 	echo "<h2>$arg</h2>"; 	
+ 	global $videos, $images, $base_url , $max2_x, $max2_y , $files3, $files3_n , $audios, $jw_videos, $jw_audios, $videocounter;
+ 	directory_navigation_links() ;	// it's "/Home/.../..."
+ 	echo "<h2>$arg</h2>"; 	//It's page title
+	//now let's analyze image
  	$system = pathinfo($arg);
  	$ext = $system['extension']; //we get file extension
 	$ext = strtolower($ext); //we trasnform extension in lower letters
@@ -566,6 +618,10 @@ function buildpage ($arg) {
 				createthumb($arg,$newname,$max2_x,$max2_y);
 				} 	
 			echo "<a href=\"$arg\"><img class=image2 src=\".img/{$max2_x}x{$max2_y}_{$arg}\"  ></a><br><i><small>(click on image to see real size)</small></i>"	;
+			//GPS
+			$geopos = read_gps_location($file) ;
+		echo "<br>Position: " . $geopos['lat'] . "," . $geopos['lng'] ;
+
 			}
 		}
 	foreach ($videos as $value2) {
@@ -573,10 +629,11 @@ function buildpage ($arg) {
 		 	//It's a video
 		 	//Let's check if it's supported by JWplayer		 	
 		 	if (in_array($ext, $jw_videos)) {
+		 		$videocounter = $videocounter + 1 ;
 			 	echo "
-			 	<div id=\"container\" >Carico il lettore ...</div>
+			 	<div id=\"container$videocounter\" >Carico il lettore ...</div>
 				<script type=\"text/javascript\">
-				jwplayer(\"container\").setup({				
+				jwplayer(\"container$videocounter\").setup({				
 				autostart: true,
 				file: \"$arg\",
 				height: $max2_y ,
@@ -593,10 +650,11 @@ function buildpage ($arg) {
 		 	//It'a a audio
 			//Let's check if it's supported by JWplayer				
 		 	if (in_array($ext, $jw_videos)) {
+		 			$videocounter = $videocounter + 1 ;
 			 	echo "
-			 	<div id=\"container\" >Carico il lettore ...</div>
+			 	<div id=\"container$videocounter\" >Carico il lettore ...</div>
 				<script type=\"text/javascript\">
-				jwplayer(\"container\").setup({				
+				jwplayer(\"container$videocounter\").setup({				
 				autostart: true,
 				file: \"$arg\",
 				height: $max2_y ,
