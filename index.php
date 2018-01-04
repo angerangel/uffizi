@@ -540,8 +540,8 @@ function buildtable () {
 	//navigation link creation operations:
 	$prev = $page - 1 ;	
 	//left arrow
-	echo "<table width=100% ><tr><td align=left valign=middle >";
-	if ($page > 1) { echo "<a href=\"index.php?page=$prev\"><img src=http://$base_url/.css/leftarrow.png  height=$max2_y width=50 ></a>";} 
+	echo "<table width=100% ><tr><td width=30% align=left valign=middle >";
+	if ($page > 1) { echo "<a href=\"index.php?page=$prev\"><img class=arrow src=http://$base_url/.css/leftarrow.png  height=$max2_y  ></a>";} 
 	echo "</td><td align=center>";
 	$next = $page + 1 ;
 	
@@ -565,8 +565,8 @@ function buildtable () {
 		}
 	echo "</table>"; 
 	//rigth navigation arrows
-	echo "</td><td valign=middle align=rigth>";
-	if ($page < $pages ) {echo "<a href=\"index.php?page=$next\"><img src=http://$base_url/.css/rigtharrow.png  height=$max2_y width=50 ></a>";}
+	echo "</td><td valign=middle align=rigth width=30% >";
+	if ($page < $pages ) {echo "<a href=\"index.php?page=$next\"><img class=arrow src=http://$base_url/.css/rigtharrow.png  height=$max2_y  align=right ></a>";}
 	echo "</td></tr></table>";
 
 	if ($page > 1) { echo "<a href=\"index.php?page=$prev\"> &lt;&lt; Prev</a>";} 
@@ -581,7 +581,8 @@ function buildtable () {
   	  if ($i < $pages){echo " - ";}
 	  }	  
 	return ;
-	}
+	}file:///home/max/public_html/uffizi/pictures/.css/mystyle.css
+
 
 
 //This function builds a page with a single screenshot of a photo or video or ...
@@ -602,8 +603,8 @@ function buildpage ($arg) {
 	$last = $pages - 1; //last array item
 	echo "<br>"	;
 	    //left navigation with arrows
-	echo "<table width=100% ><tr><td valign=middle align=left >";
-	if ($page > 1) { echo "<a href=\"index.php?img=$files3[$prev]\"><img src=http://$base_url/.css/leftarrow.png  height=$max2_y width=50 ></a>";} 
+	echo "<table width=100% ><tr><td width=30% valign=middle align=left >";
+	if ($page > 1) { echo "<a href=\"index.php?img=$files3[$prev]\"><img class=arrow src=http://$base_url/.css/leftarrow.png  height=$max2_y  ></a>";} 
 	echo "</td><td align=center >";
 
 
@@ -668,8 +669,8 @@ function buildpage ($arg) {
 		}		
 	//***
 	//right navigation
-	echo "</td><td alig=right >";
-	if ($page < $pages ) {echo "<a href=\"index.php?img=$files3[$next]\"><img src=http://$base_url/.css/rigtharrow.png  height=$max2_y width=50 ></a>";}	
+	echo "</td><td align=right valign=middle width=30% >";
+	if ($page < $pages ) {echo "<a href=\"index.php?img=$files3[$next]\"><img class=arrow src=http://$base_url/.css/rigtharrow.png  height=$max2_y align=right ></a>";}	
 	echo "</td></tr></table><br>";
 	
 	if ($page > 1) { echo "<a href=\"index.php?img=$files3[$prev]\">&lt;&lt; Prev</a>";} 
