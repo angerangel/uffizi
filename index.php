@@ -10,6 +10,7 @@ $max_file_p_pa_h = 4 ; //max files per pag hor
 $max_file_p_pa_v = 4 ; //max files per pag ver
 $max_file_pa = $max_file_p_pa_v * $max_file_p_pa_h ; //max files per page
 $base_url = 'www.maxvessi.net/uffizi/pictures' ; //you must put your main folder without http://
+#$base_url = 'localhost/~max/uffizi' ;
 $searchboxprefill = 'Cerca'; //here you put the 
 $max1_x = 100 ; //max x size for preview images
 $max1_y = 100 ; //max y size for preview images
@@ -136,14 +137,14 @@ if ($_GET[Logon] == "yes" ) {
 	</form><br>" ;
 	}
 
-if (isset($uffizzi[user])) { 	
- 	$user = $uffizzi[user];
- 	$password = $uffizzi[password];
+if (isset($uffizi[user])) { 	
+ 	$user = $uffizi[user];
+ 	$password = $uffizi[password];
 	 }
 	
 if ($_GET[Logoff] == "yes") {
- 	setcookie("uffizzi[user]","" ,time()-3600);
- 	setcookie("uffizzi[password]","", time()-3600);
+ 	setcookie("uffizi[user]","" ,time()-3600);
+ 	setcookie("uffizi[password]","", time()-3600);
  	$user = "xxx";
  	$password = "xxx";
 	 } //cancelliamo il cookie
@@ -153,21 +154,32 @@ if (isset($_POST[user])) {
  	$user = $_POST[user];
 	$password = $_POST[password];
 	}  
+	
+if (isset($_COOKIE[uffizi])) {
+	$uffizi = $_COOKIE[uffizi] ;
+	$user = $uffizi[user];
+	$password = $uffizi[password];
+	}
  	
  if (isset($user) && ($password === $passwords[$user]) ) {
- 	 	setcookie("uffizzi[user]",$user, time() +2592000 );
-		setcookie("uffizzi[password]",$password, time() +2592000 );
+ 	//Ha azzeccato user e password
+ 	 	setcookie("uffizi[user]",$user, time() +2592000 );
+		setcookie("uffizi[password]",$password, time() +2592000 );
  	 	$level = $levels[$user];
  	 	echo "User: $user , your level is $level. <small>(<a href=\"{$_SERVER['php_self']}?Logoff=yes";
 		if (isset($_GET[img])) {echo "&img=$img";}
 		if (isset($_GET[page])) {echo "&page=$page";}
 		echo "\">Logout</a>)</small><br><br>";
+		
 		} else {
-			if (isset($user)) {	
-			 	if ($_GET[Logoff] == "yes") {echo "<font color=#FF0000 >You are logout</font><br>";} else {
-					echo "<font color=#FF0000 >Bad username or password</font><br>";}
-				setcookie("uffizzi[user]","", time()-3600);
-			 	setcookie("uffizzi[password]","", time()-3600);	
+			//worng password
+			if (isset($user)) {
+			 	if ($_GET[Logoff] == "yes") {echo "<font color=#FF0000 >You are logout</font><br>";
+			 	} else {
+							echo "<font color=#FF0000 >Bad username or password</font><br>";
+							}
+				setcookie("uffizi[user]","", time()-3600);
+			 	setcookie("uffizi[password]","", time()-3600);	
 				}
 			}
 //End of security configuration
@@ -216,8 +228,8 @@ foreach ($files1 as $item) {
 //In the base directory we put in reverse order the folder,  
 //this way the last inserted folder are showe as first if you put the date
 //in the subfolder in the right order
-$temp = "http://" . $base_url . "/" ; //http://www.maxvessi.net/uffizzi/pictures/
-$temp2 = "http://" . $_SERVER["SERVER_NAME"] . $_SERVER["PHP_SELF"]; //  http://www.maxvessi.net/uffizzi/pictures/example/index.php or else
+$temp = "http://" . $base_url . "/" ; //http://www.maxvessi.net/uffizi/pictures/
+$temp2 = "http://" . $_SERVER["SERVER_NAME"] . $_SERVER["PHP_SELF"]; //  http://www.maxvessi.net/uffizi/pictures/example/index.php or else
 
 $temp3 = strlen($temp); //example: 38
 $temp2 = substr($temp2, $temp3); //example: /example/index.php
@@ -521,7 +533,7 @@ function directory_navigation_links()  {
 		}
          echo "<i>$links</i>" ;
 	}
-//END of buoling top navigation links functions
+//END of bulding top navigation links functions
 
 //This function create the table with images of directories and images/videos
 function buildtable () {
@@ -709,7 +721,7 @@ if ($_GET['img']) {
 <br><br>
 <small><i>Powered by <a href="http://angerangel.github.io/uffizi/">Uffizi web gallery</a>
 <?php echo " $version"; 
-if (!(isset($uffizzi[user])) && !(isset($_GET[Logon])) )  {
+if (!(isset($uffizi[user])) && !(isset($_GET[Logon])) )  {
 	echo " - <a href=\"{$_SERVER['php_self']}?Logon=yes";
 	if (isset($_GET[img])) {echo "&img=$img";}
 	if (isset($_GET[page])) {echo "&page=$page";}
