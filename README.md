@@ -7,6 +7,7 @@ Simply upload files on your server and all the job will do the index.php file.
 
 Benefits:
 * extremely easy
+* **no limits** (no loss performance with infinite videos, image and sounds)
 * extremely customizable
 * just one file (plus addons in secret subfolders)
 * it supports images: jpg, gif, jpeg, png, 
