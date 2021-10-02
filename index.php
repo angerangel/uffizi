@@ -7,7 +7,7 @@ ini_set('display_errors',0);
 //****Configuration*****
 ini_set('memory_limit', '100M'); //set the memeroy usage, with big images you need a lot of memory!
 $max_file_p_pa_h = 4 ; //max files per pag hor
-$max_file_p_pa_v = 4 ; //max files per pag ver
+$max_file_p_pa_v = 4 ; //max files per pag vert
 $max_file_pa = $max_file_p_pa_v * $max_file_p_pa_h ; //max files per page
 $base_url = 'www.maxvessi.net/uffizi/pictures' ; //you must put your main folder without http://
 #$base_url = 'localhost/~max/uffizi' ;
@@ -19,7 +19,7 @@ $max2_y = 420 ; //max y size big photos
 $images = array('jpg','gif','jpeg', 'png');
 $videos = array('3gp','avi','wmv','flv','ogv','webm','mp4','mov','f4v','3g2');
 $audios = array('wav','mid','mp3','ogg','aac','m4a');
-$passwords = array(max => "mypassword", ale => "ale"); //add users and password
+$passwords = array(max => "maxpass", ale => "alepass"); //add users and password
 $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level are public files; levels 1 can see only levels 0 and 1; levels 2 can see levels 0, 1  and 2; and so on... There is no level limit you can assign.
 //******************End of configuration**********************
 //Author: Massimiliano Vessi 
@@ -38,7 +38,7 @@ $levels = array(max => 2, ale => 1) ; //choose user level of security. 0 level a
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 //***********************************************   
-$version = "8.1"; 
+$version = "8.2"; 
 $jw_videos = array("mp4", "webm", "ogv", "flv", "mov", "f4v", "3gp", "3g2"); //videos readed by JWPlayer
 $jw_audios = array("aac", "m4am", "ogg", "mp3");  //audios readed by JWPLayer
  $videocounter = 0 ;
@@ -126,62 +126,66 @@ echo "</h1>";
 
 $level = 0 ;
 
-if ($_GET[Logon] == "yes" ) {
-	 echo "<form method=post action=\"{$_SERVER['php_self']}?Logon=no";
-	if (isset($_GET[img])) {echo "&img=$img";}
-	if (isset($_GET[page])) {echo "&page=$page";}
-	 echo "\">
-	<i>User:	<input type=\"text\" name=\"user\">
-	Password: <input type=\"password\" name=\"password\"></i>
-	<input type=\"submit\">
-	</form><br>" ;
+//login control
+
+function loginmex() {
+	echo "<form method=post action=\"{$_SERVER['php_self']}\" >";
+			if (isset($_GET[img])) {echo "<input type=hidden name=img value=$img > ";}
+			if (isset($_GET[page])) {echo "<input type=hidden name=page value=$page > ";}
+	 		echo " 	<i>User:	<input type=\"text\" name=\"user\">	
+			Password: <input type=\"password\" name=\"password\"></i>
+			<input type=\"submit\">
+			</form><br>" ;
 	}
 
-if (isset($uffizi[user])) { 	
- 	$user = $uffizi[user];
- 	$password = $uffizi[password];
-	 }
-	
-if ($_GET[Logoff] == "yes") {
+if (isset($_COOKIE[uffizi])) {  //controlliamo se c'è il cookie
+	$uffizi = $_COOKIE[uffizi] ;	
+	$user = $uffizi[user];
+	$password = $uffizi[password];
+	} else { 	 //se non c'è controlliamo se abbiamo provato il  login
+		if (isset($_POST[user])) {
+ 		$user = $_POST[user];
+		$password = $_POST[password];
+		} else { //se non c'è fornimo il modo di fare il login
+			loginmex();
+			}
+		}
+
+ 
+			
+// controlliamo use e password oppure logout
+if ($_GET[Logoff] == "yes") {//logout
+	echo "<font color=#FF0000 >You are logout</font><br>";
  	setcookie("uffizi[user]","" ,time()-3600);
  	setcookie("uffizi[password]","", time()-3600);
  	$user = "xxx";
  	$password = "xxx";
-	 } //cancelliamo il cookie
-	
-
-if (isset($_POST[user])) {
- 	$user = $_POST[user];
-	$password = $_POST[password];
-	}  
-	
-if (isset($_COOKIE[uffizi])) {
-	$uffizi = $_COOKIE[uffizi] ;
-	$user = $uffizi[user];
-	$password = $uffizi[password];
-	}
- 	
- if (isset($user) && ($password === $passwords[$user]) ) {
- 	//Ha azzeccato user e password
- 	 	setcookie("uffizi[user]",$user, time() +2592000 );
-		setcookie("uffizi[password]",$password, time() +2592000 );
- 	 	$level = $levels[$user];
- 	 	echo "User: $user , your level is $level. <small>(<a href=\"{$_SERVER['php_self']}?Logoff=yes";
-		if (isset($_GET[img])) {echo "&img=$img";}
-		if (isset($_GET[page])) {echo "&page=$page";}
-		echo "\">Logout</a>)</small><br><br>";
-		
-		} else {
-			//worng password
-			if (isset($user)) {
-			 	if ($_GET[Logoff] == "yes") {echo "<font color=#FF0000 >You are logout</font><br>";
-			 	} else {
-							echo "<font color=#FF0000 >Bad username or password</font><br>";
-							}
-				setcookie("uffizi[user]","", time()-3600);
-			 	setcookie("uffizi[password]","", time()-3600);	
+	} else { 
+		if (isset($user) && ($password === $passwords[$user]) ) {
+ 			//Ha azzeccato user e password
+ 	 		setcookie("uffizi[user]",$user, time() +604800 ); //Una settimana
+			setcookie("uffizi[password]",$password, time() +604800 );
+ 	 		$level = $levels[$user];
+ 	 		echo "User: $user , your level is $level. <small>(<a href=\"{$_SERVER['php_self']}?Logoff=yes";
+			if (isset($_GET[img])) {echo "&img=$img";}
+			if (isset($_GET[page])) {echo "&page=$page";}
+			echo "\">Logout</a>)</small><br><br>";
+			} else {
+				//password errata
+			if  (isset($user)) {	
+				echo "<font color=#FF0000 >Bad username or password</font><br>";
+				setcookie("uffizi[user]","" ,time()-3600);
+ 				setcookie("uffizi[password]","", time()-3600);
+ 				loginmex(); 
 				}
+					
+	
+				}					
 			}
+			
+	
+	
+	
 //End of security configuration
 
 //Starting folder analasys
